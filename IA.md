@@ -41,3 +41,13 @@
 - **Mudança:** [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) e [CONTRIBUTING.md](CONTRIBUTING.md); o README passa a ligar para o guia de contribuição.
 - **Motivo:** agentes e pessoas precisam do mesmo mapa de leitura e das mesmas regras (git, gate, segurança), sem reler o repositório inteiro. Segue o padrão Felixo.
 - **Validação:** links conferidos pelo verificador de links.
+
+---
+
+## 05/11/2026 — Ambiente Python com ruff, pytest e lockfile
+
+- **Mudança:** `pyproject.toml` e `uv.lock`.
+- **Motivo:** o padrão pede dependências fixadas, com lockfile. O menu `start_app.py` não tem dependências; só o desenvolvimento usa `ruff` e `pytest`, com versões exatas.
+- **Decisão pequena:** `uv` (já usado nos outros projetos do autor), com `package = false` porque não há pacote Python a publicar.
+- **Validação:** `uv sync --locked` reproduz o ambiente a partir do lockfile.
+- **Limitação:** não há dependência de execução para auditar. A auditoria de dependências entra quando o aplicativo (Fase 1) trouxer pacotes de Rust e de Node.
