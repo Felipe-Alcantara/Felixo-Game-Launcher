@@ -701,6 +701,47 @@ mod testes {
         ));
     }
 
+    // Os dois testes abaixo fixam o contrato JSON com `ui/src/api.ts`.
+
+    #[test]
+    fn jogo_serializa_com_os_campos_que_a_interface_le() {
+        let mut b = Biblioteca::em_memoria().unwrap();
+        b.sincronizar(
+            "steam",
+            &[detectado("steam", "10", "Alfa", Some(5), true)],
+            7,
+        )
+        .unwrap();
+
+        let jogo = b.listar(&Filtro::default()).unwrap().remove(0);
+        let json = serde_json::to_value(jogo).unwrap();
+
+        let mut chaves: Vec<_> = json.as_object().unwrap().keys().cloned().collect();
+        chaves.sort();
+        assert_eq!(
+            chaves,
+            [
+                "disponivel",
+                "fonte",
+                "id",
+                "id_externo",
+                "nome",
+                "pasta",
+                "tamanho_bytes",
+                "visto_em"
+            ]
+        );
+    }
+
+    #[test]
+    fn a_interface_envia_a_ordem_em_snake_case() {
+        let ordem: Ordem =
+            serde_json::from_value(serde_json::json!("tamanho_decrescente")).unwrap();
+        assert_eq!(ordem, Ordem::TamanhoDecrescente);
+        let ordem: Ordem = serde_json::from_value(serde_json::json!("nome")).unwrap();
+        assert_eq!(ordem, Ordem::Nome);
+    }
+
     #[test]
     fn duas_conexoes_gravam_sem_travar() {
         let tmp = TempDir::new().unwrap();

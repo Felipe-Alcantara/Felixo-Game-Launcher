@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/fontes", "crates/biblioteca"]
+members = ["crates/fontes", "crates/biblioteca", "crates/ipc", "src-tauri"]
 
 [workspace.package]
 edition = "2021"

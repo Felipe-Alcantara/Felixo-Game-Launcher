@@ -1,0 +1,34 @@
+[package]
+name = "felixo-game-launcher"
+version = "0.0.0"
+description = "Launcher open source que reúne os jogos instalados no computador, de qualquer loja ou launcher."
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+# O executável de teste de um crate Tauri não abre no Windows (falta o manifesto do Common
+# Controls v6). Por isso o shell não tem testes de unidade: o que dá para testar fica nos
+# outros crates, e o contrato com a interface em `felixo-ipc`.
+[lib]
+name = "felixo_game_launcher_lib"
+test = false
+doctest = false
+
+[[bin]]
+name = "felixo-game-launcher"
+path = "src/main.rs"
+test = false
+
+[dependencies]
+felixo-biblioteca = { version = "0.0.0", path = "../crates/biblioteca" }
+felixo-fontes = { version = "0.0.0", path = "../crates/fontes" }
+felixo-ipc = { version = "0.0.0", path = "../crates/ipc" }
+tauri = "2.11.6"
+
+[build-dependencies]
+tauri-build = "2.6.3"

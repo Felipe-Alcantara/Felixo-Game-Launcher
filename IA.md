@@ -164,3 +164,15 @@
 - **Mudança:** cada biblioteca é sondada uma única vez (`read_dir`) e todas são lidas ao mesmo tempo (`std::thread::scope`), mesclando o resultado na ordem do VDF para continuar determinístico. A comparação de pastas deixou de usar `canonicalize` (que consulta o disco) e passou a normalizar o texto.
 - **Medido:** a detecção contra a mesma instalação real caiu de 28,9 s para **2,2 s**, com o mesmo resultado (30 jogos e o mesmo aviso do disco ausente). 29 testes nas fontes, 4 novos (grafias do registro e do VDF, várias bibliotecas e ordem dos avisos).
 - **Limitação:** links simbólicos não são resolvidos na comparação de pastas; dois links para a mesma biblioteca só repetem avisos (marcado como `shortcut` no código).
+
+---
+
+## 05/11/2026 — Aplicativo Tauri e contrato com a interface
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `src-tauri` (Tauri 2, três comandos, CSP restritiva e permissões mínimas) e `crates/ipc` (`ErroApp` e `Atualizacao`). A biblioteca ganhou testes do formato JSON de `Jogo` e de `Ordem`.
+- **Decisão:** os tipos do contrato ficam fora do shell. Motivo medido: o executável de teste de um crate Tauri não abre no Windows (`0xC0000139`, falta o manifesto do Common Controls v6), o que vale também para o toolchain MSVC. O shell não tem testes de unidade (`test = false`, com o motivo escrito no manifesto) e o que dá para testar mora em `ipc`, `biblioteca` e `fontes`.
+- **Verificado rodando o aplicativo de verdade** (janela do WebView2 inspecionada por depuração remota, banco limpo antes): a tela chegou a "Biblioteca atualizada: 30 detectados, 30 novos", com 30 linhas, o aviso do disco ausente e 30 jogos no SQLite. A captura da janela real mostrou os tamanhos corretos.
+- **Medido:** `clippy -D warnings` limpo no workspace; 21 testes na biblioteca, 29 nas fontes e 5 no contrato.
+- **Achados de ambiente:** com o toolchain `gnu` do Rust e o MSYS2, o `windres` não abre o ícone quando o caminho **do código** tem acento (antes, o `ld.exe` já falhava com acento no caminho do build). O `tauri-build` canonicaliza o caminho, então nem uma junção resolve; compilei por um espelho em caminho ASCII. Isso não afeta o CI do GitHub.
+- **Limitações:** o botão Jogar foi testado só com identificadores inválidos e pelas regras da biblioteca; abrir um jogo de verdade não foi feito, porque lançaria um jogo no computador de quem testou. Linux e macOS ficam por conta do CI.

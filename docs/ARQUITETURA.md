@@ -1,7 +1,7 @@
 # Arquitetura-alvo
 
 > **O que é:** a organização em camadas proposta para o aplicativo.
-> **Status:** em implementação na Fase 1. Já existem `crates/fontes`, `crates/biblioteca` e `ui/`; `varredura`, `acoes` e `src-tauri` ainda não. O contrato pode mudar quando a segunda fonte for escrita; qualquer mudança vira uma entrada nova no `IA.md`.
+> **Status:** em implementação na Fase 1. Já existem `crates/fontes`, `crates/biblioteca`, `crates/ipc`, `src-tauri` e `ui/`; `varredura` e `acoes` ainda não. O contrato pode mudar quando a segunda fonte for escrita; qualquer mudança vira uma entrada nova no `IA.md`.
 > **Quando usar:** antes de criar um módulo, uma fonte nova ou qualquer ação que altere arquivos. As decisões de base estão em [DECISOES.md](DECISOES.md) e as fontes em [FONTES-DE-JOGOS.md](FONTES-DE-JOGOS.md).
 
 ## Camadas
@@ -9,10 +9,11 @@
 | Camada | Responsabilidade | Não faz |
 | --- | --- | --- |
 | `crates/fontes` | Um módulo por loja ou launcher, cada um implementando o contrato `Fonte` | Não conhece interface, banco nem ações destrutivas |
-| `crates/biblioteca` | Persistência em SQLite: jogos, tamanhos, tags, histórico | Não lê arquivos de lojas |
+| `crates/biblioteca` | Persistência em SQLite: jogos, tamanhos, tags, histórico; e a regra de só abrir jogo disponível | Não lê arquivos de lojas |
 | `crates/varredura` | Varredura em segundo plano e observador de pastas | Não grava direto: entrega resultados à biblioteca |
 | `crates/acoes` | Mover e apagar arquivos, isolado e com as travas abaixo | Não decide o que apagar: recebe um pedido já confirmado |
-| `src-tauri` | Borda: comandos entre a interface e o núcleo | **Sem regra de negócio** |
+| `crates/ipc` | Contrato com a interface: os erros e o resultado de atualizar que atravessam a ponte do Tauri | Não conhece o Tauri, para ser testável em qualquer sistema |
+| `src-tauri` | Borda: comandos entre a interface e o núcleo | **Sem regra de negócio** e sem testes de unidade (o executável de teste de um crate Tauri não abre no Windows) |
 | `ui/` | Interface web em TypeScript, com pt-BR e en | Não acessa o disco |
 
 Só `fontes` lê arquivos de lojas. Só `acoes` altera arquivos. Só a borda fala com a interface.
