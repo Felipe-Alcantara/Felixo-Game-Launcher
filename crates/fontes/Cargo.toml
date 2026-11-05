@@ -1,0 +1,23 @@
+[package]
+name = "felixo-fontes"
+version = "0.0.0"
+description = "Detecção de jogos instalados em lojas e launchers."
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+open = "5.4.5"
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2.0.21"
+
+[target."cfg(windows)".dependencies]
+winreg = "0.56.0"
+
+[dev-dependencies]
+tempfile = "3.27.0"

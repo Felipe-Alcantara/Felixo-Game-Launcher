@@ -101,3 +101,15 @@
 - **Decisão:** a premissa da decisão 2 e as travas 3 a 5 viram regras do projeto, e o início da Fase 1 está autorizado.
 - **Motivo:** as travas só restringem (agir dentro da pasta de instalação, bloquear em disco ausente, testar em pastas temporárias), então adotá-las é o caminho conservador.
 - **Limitação:** a aprovação veio em bloco, não item a item. Para afrouxar uma trava, o mantenedor precisa dizer isso explicitamente.
+
+---
+
+## 05/11/2026 — Núcleo Rust: fonte Steam
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** workspace Cargo e `crates/fontes` (contrato `Fonte`, leitor VDF, fonte Steam e o exemplo `detectar`). O `Cargo.lock` passa a ser versionado, por ser um aplicativo.
+- **Decisões:** `detectar` devolve `Deteccao { jogos, avisos }` e nunca falha, para que um disco ausente ou um manifesto corrompido não derrube os demais jogos. `abrir` recebe só o identificador dentro da fonte; a proposta da arquitetura usava o `Jogo` inteiro e uma lista de plataformas, que ficam para quando houver a segunda fonte. A arquitetura foi atualizada no mesmo passo.
+- **Validação de fronteira:** o `appid` só aceita dígitos (ele vira URL) e o `installdir` não pode ter separador nem `..` (será a base das ações no disco).
+- **Medido:** 24 testes verdes e `clippy -D warnings` limpo. Contra uma instalação real da Steam, o exemplo achou 30 jogos, os mesmos de um levantamento feito à mão, e transformou a biblioteca de um disco ausente em aviso.
+- **Achado de ambiente:** o toolchain `gnu` do Rust com o gcc do MSYS2 falha ao linkar quando o diretório de build tem acento no caminho: o `ld.exe` não encontra os objetos. Definir `CARGO_TARGET_DIR` num caminho ASCII resolve.
+- **Limitação:** a abertura (`steam://rungameid/...`) só foi testada com identificadores inválidos; a abertura de verdade depende do aplicativo.

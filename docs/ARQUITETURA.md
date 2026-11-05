@@ -1,7 +1,7 @@
 # Arquitetura-alvo
 
 > **O que é:** a organização em camadas proposta para o aplicativo.
-> **Status:** proposta para a Fase 1. **Nada disto está implementado.** O contrato pode mudar quando o primeiro adaptador for escrito; qualquer mudança vira uma entrada nova no `IA.md`.
+> **Status:** em implementação na Fase 1. Já existe `crates/fontes`; `biblioteca`, `varredura`, `acoes`, `src-tauri` e `ui` ainda não. O contrato pode mudar quando a segunda fonte for escrita; qualquer mudança vira uma entrada nova no `IA.md`.
 > **Quando usar:** antes de criar um módulo, uma fonte nova ou qualquer ação que altere arquivos. As decisões de base estão em [DECISOES.md](DECISOES.md) e as fontes em [FONTES-DE-JOGOS.md](FONTES-DE-JOGOS.md).
 
 ## Camadas
@@ -17,18 +17,18 @@
 
 Só `fontes` lê arquivos de lojas. Só `acoes` altera arquivos. Só a borda fala com a interface.
 
-## Contrato de uma fonte (ilustrativo)
+## Contrato de uma fonte
 
 ```rust
 pub trait Fonte {
     fn id(&self) -> &'static str;
-    fn plataformas(&self) -> &'static [Plataforma];
-    fn detectar(&self) -> Result<Vec<JogoDetectado>, ErroFonte>;
-    fn abrir(&self, jogo: &Jogo) -> Result<(), ErroFonte>;
+    fn nome(&self) -> &'static str;
+    fn detectar(&self) -> Deteccao;
+    fn abrir(&self, id_externo: &str) -> Result<(), ErroFonte>;
 }
 ```
 
-Uma fonte nova — inclusive de quem contribui — implementa só isto. Se o launcher da loja não estiver instalado, `detectar` devolve lista vazia, não erro.
+Uma fonte nova — inclusive de quem contribui — implementa só isto. `detectar` nunca falha: devolve `Deteccao { jogos, avisos }`. Loja não instalada dá lista vazia, e problemas parciais (disco ausente, manifesto corrompido) vão em `avisos`, sem derrubar os demais jogos. A lista de plataformas por fonte entra quando houver a segunda fonte.
 
 ## Travas das ações no disco
 

@@ -6,7 +6,7 @@
 
 | Fonte | Como detectar | Como abrir | Sistemas | Verificação |
 | --- | --- | --- | --- | --- |
-| Steam | `steamapps/libraryfolders.vdf` lista as bibliotecas; cada uma tem `steamapps/appmanifest_<appid>.acf` com `name`, `installdir`, `SizeOnDisk` e `StateFlags` (o bit 4 indica instalação completa) | `steam://rungameid/<appid>` | Windows, Linux, macOS | Detecção conferida no Windows; abertura a verificar |
+| Steam | `steamapps/libraryfolders.vdf` lista as bibliotecas; cada uma tem `steamapps/appmanifest_<appid>.acf` com `name`, `installdir`, `SizeOnDisk` e `StateFlags` (o bit 4 indica instalação completa) | `steam://rungameid/<appid>` | Windows, Linux, macOS | Detecção implementada e conferida contra uma instalação real no Windows; a abertura (`steam://`) ainda não foi testada de ponta a ponta |
 | Epic Games | `%ProgramData%\Epic\EpicGamesLauncher\Data\Manifests\*.item` (JSON em UTF-8, com `DisplayName` e `InstallLocation`) | `com.epicgames.launcher://apps/<AppName>?action=launch&silent=true` | Windows; macOS a verificar | Detecção conferida no Windows; abertura a verificar |
 | GOG | Registro `HKLM\SOFTWARE\WOW6432Node\GOG.com\Games` e arquivos `goggame-<id>.info` na pasta do jogo | Executável do jogo | Windows | A verificar |
 | Riot Games | `%ProgramData%\Riot Games\Metadata\` e a pasta do Riot Client | `RiotClientServices.exe --launch-product=<produto> --launch-patchline=live` | Windows | Pasta de metadados conferida; argumentos a verificar |
@@ -36,6 +36,7 @@ Varrer vários discos com milhões de arquivos leva **minutos**. Por isso a varr
 
 - **Disco ausente ou com defeito.** As bibliotecas da Steam e o registro podem apontar para unidades que não estão montadas. O jogo aparece como *indisponível*; ele **nunca** é removido da biblioteca sozinho.
 - **Restos de instalação.** Pastas em `steamapps/common` sem `appmanifest` correspondente existem e não são jogos instalados.
+- **Caminhos.** No VDF a barra invertida vem escapada (`C:\\Steam`), e o registro do Windows guarda `c:/steam`. Compare pastas pelo caminho real, senão a mesma biblioteca é lida duas vezes.
 - **Codificação.** Os manifestos da Epic são UTF-8; lê-los em outra codificação corrompe os acentos dos nomes.
 - **Estado parcial.** O `StateFlags` da Steam pode indicar instalação completa com atualização pendente; o tamanho informado pode mudar depois da atualização.
 - **Registro do Windows.** Só existe no Windows; em Linux e macOS cada fonte precisa do seu equivalente.

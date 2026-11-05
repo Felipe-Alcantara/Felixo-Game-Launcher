@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["crates/fontes"]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/Felipe-Alcantara/Felixo-Game-Launcher"
+rust-version = "1.85"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
