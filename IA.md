@@ -72,3 +72,12 @@
 - **Decisão:** ignora links externos, âncoras puras e qualquer coisa dentro de código; todo o resto que parece link precisa apontar para um arquivo que exista.
 - **Validação:** testes cobrindo link bom, quebrado (com arquivo e linha), âncora, código e pastas ignoradas; rodado sobre o próprio repositório.
 - **Limitação:** não confere se a âncora (`#secao`) existe dentro do arquivo.
+
+---
+
+## 05/11/2026 — CI em Windows, Linux e macOS
+
+- **Mudança:** `.github/workflows/ci.yml`.
+- **Motivo:** o padrão exige multiplataforma, e há histórico de testes que só passavam no Windows (decisão 14). É gratuito em repositório público.
+- **O que roda:** `ruff`, `pytest` e a verificação de links, em Ubuntu, Windows e macOS, com Python 3.11 e 3.13. Ações fixadas por versão principal, `persist-credentials: false` e permissão mínima (`contents: read`).
+- **Limitação:** o CI ainda não gera binários nem Release; isso entra com o aplicativo (Fases 1 e 2). O resultado da primeira execução será registrado em entrada própria, depois do push.
