@@ -17,6 +17,7 @@
 | Suportar uma loja ou launcher novo | [`docs/FONTES-DE-JOGOS.md`](docs/FONTES-DE-JOGOS.md) e [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md) |
 | Mover ou apagar arquivos | [`docs/ARQUITETURA.md`](docs/ARQUITETURA.md), seção das travas. **Alto risco.** |
 | Rodar, instalar ou configurar | `python start_app.py` |
+| Compilar, testar ou depurar o código | [`docs/DESENVOLVIMENTO.md`](docs/DESENVOLVIMENTO.md) |
 | Contribuir | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 
 ## Regras do repositório
@@ -24,7 +25,7 @@
 - **Padrão de qualidade:** [Felixo System Design](https://github.com/Felipe-Alcantara/Felixo-System-Design).
 - **Git:** commite direto na `main`, em commits pequenos, um tema por commit, no formato Conventional Commits em português (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`, `ci:`). Branch só para feature grande, refatoração significativa ou alto risco, com a justificativa escrita.
 - **Documentação viva:** mudou comportamento, estrutura ou comando? Atualize README, `docs/` e `IA.md` no mesmo commit. No `IA.md`, acrescente uma entrada datada.
-- **Gate antes de enviar:** `uv run ruff check .`, `uv run pytest -q` e `uv run python -m scripts.qualidade.verificar_links`. Depois do push, acompanhe o CI até o fim.
+- **Gate antes de enviar:** `uv run ruff check .`, `uv run pytest -q` e `uv run python -m scripts.qualidade.verificar_links`; no Rust, `cargo fmt --all --check`, `cargo clippy --workspace --all-targets -- -D warnings` e `cargo test --workspace`; na interface, `npm run typecheck`, `npm test` e `npm run build`. Depois do push, acompanhe o CI até o fim.
 - **Multiplataforma:** Windows, Linux e macOS por padrão. Nada de caminho, separador ou comando preso a um sistema; limitação por sistema vai documentada.
 - **Segurança:** nenhum segredo, token ou caminho pessoal em commit. Testes de mover e apagar usam só pastas temporárias.
 - **Linguagem:** português nos textos do projeto, em linguagem de open source, sem valores locais fixos.

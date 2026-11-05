@@ -36,7 +36,8 @@ The menu checks the tools needed to build the application (Git, Node.js and Rust
 - [Scope and roadmap](docs/ESCOPO-E-ROADMAP.md) (Portuguese)
 - [v1 decisions](docs/DECISOES.md) (Portuguese)
 - [Game sources](docs/FONTES-DE-JOGOS.md) (Portuguese)
-- [Target architecture](docs/ARQUITETURA.md) (Portuguese)
+- [Architecture](docs/ARQUITETURA.md) (Portuguese)
+- [Development: build, test and debug](docs/DESENVOLVIMENTO.md) (Portuguese)
 - [IA.md](IA.md) — decision timeline
 
 ## Contributing

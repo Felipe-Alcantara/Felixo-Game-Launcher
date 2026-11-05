@@ -176,3 +176,12 @@
 - **Medido:** `clippy -D warnings` limpo no workspace; 21 testes na biblioteca, 29 nas fontes e 5 no contrato.
 - **Achados de ambiente:** com o toolchain `gnu` do Rust e o MSYS2, o `windres` não abre o ícone quando o caminho **do código** tem acento (antes, o `ld.exe` já falhava com acento no caminho do build). O `tauri-build` canonicaliza o caminho, então nem uma junção resolve; compilei por um espelho em caminho ASCII. Isso não afeta o CI do GitHub.
 - **Limitações:** o botão Jogar foi testado só com identificadores inválidos e pelas regras da biblioteca; abrir um jogo de verdade não foi feito, porque lançaria um jogo no computador de quem testou. Linux e macOS ficam por conta do CI.
+
+---
+
+## 05/11/2026 — Guia de desenvolvimento
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `docs/DESENVOLVIMENTO.md` (requisitos por sistema, comandos do dia a dia e as armadilhas medidas), ligado do README, do `CONTRIBUTING.md` e do `AGENTS.md`, que também ganharam o gate do Rust e da interface.
+- **Correção de uma afirmação minha:** o guia dizia, no começo do dia, que o acento só atrapalhava no diretório de build. A medição seguinte mostrou que o `windres` também falha quando a pasta do código tem acento, e o guia foi corrigido antes de ser commitado.
+- **Medido x suposto:** as duas falhas por acento foram observadas; a alternativa com o Build Tools da Microsoft (MSVC) é o caminho oficial do Tauri, mas não foi exercitada neste computador, que não tem o Build Tools.

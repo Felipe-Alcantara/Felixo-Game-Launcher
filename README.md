@@ -36,7 +36,8 @@ O menu confere as ferramentas necessárias para construir o aplicativo (Git, Nod
 - [Escopo e roadmap](docs/ESCOPO-E-ROADMAP.md)
 - [Decisões da v1](docs/DECISOES.md)
 - [Fontes de jogos](docs/FONTES-DE-JOGOS.md)
-- [Arquitetura-alvo](docs/ARQUITETURA.md)
+- [Arquitetura](docs/ARQUITETURA.md)
+- [Desenvolvimento: compilar, testar e depurar](docs/DESENVOLVIMENTO.md)
 - [IA.md](IA.md) — linha do tempo de decisões
 
 ## Contribuir
