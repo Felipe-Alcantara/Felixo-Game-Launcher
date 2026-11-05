@@ -154,3 +154,13 @@
 - **Mudança:** `scripts/icones/gerar_icone.py` (só biblioteca padrão), o ícone-fonte em `assets/` e os formatos gerados pelo Tauri CLI em `src-tauri/icons/` (o Tauri exige o `.ico` para compilar no Windows).
 - **Motivo:** um ícone próprio e reproduzível, sem baixar arte de terceiros nem depender de licença alheia. Os formatos de Android, iOS e da Microsoft Store foram descartados: o aplicativo é só para desktop.
 - **Medido:** 3 testes (PNG válido com CRC correto, cantos transparentes, play branco sobre fundo em degradê); o ícone de 1024 pixels sai em cerca de 4 s.
+
+---
+
+## 05/11/2026 — Detecção da Steam em paralelo e com uma sondagem por disco
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **O que aconteceu:** ao rodar o aplicativo de verdade, a tela ficou em "Atualizando…" e o banco com 0 jogos. Os testes de unidade não pegavam isso. Cronometrada sozinha, a detecção levava **28,9 s**; cada acesso ao leitor de cartão vazio custava cerca de 4,7 s, e o código sondava a unidade ausente várias vezes (verificar, canonicalizar e ler).
+- **Mudança:** cada biblioteca é sondada uma única vez (`read_dir`) e todas são lidas ao mesmo tempo (`std::thread::scope`), mesclando o resultado na ordem do VDF para continuar determinístico. A comparação de pastas deixou de usar `canonicalize` (que consulta o disco) e passou a normalizar o texto.
+- **Medido:** a detecção contra a mesma instalação real caiu de 28,9 s para **2,2 s**, com o mesmo resultado (30 jogos e o mesmo aviso do disco ausente). 29 testes nas fontes, 4 novos (grafias do registro e do VDF, várias bibliotecas e ordem dos avisos).
+- **Limitação:** links simbólicos não são resolvidos na comparação de pastas; dois links para a mesma biblioteca só repetem avisos (marcado como `shortcut` no código).

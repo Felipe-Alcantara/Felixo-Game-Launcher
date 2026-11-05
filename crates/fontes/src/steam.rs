@@ -4,6 +4,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::io::ErrorKind;
 use std::path::{Component, Path, PathBuf};
+use std::thread;
 
 use crate::vdf::{self, Valor};
 use crate::{Deteccao, ErroFonte, Fonte, JogoDetectado};
@@ -55,9 +56,32 @@ impl Fonte for Steam {
         let Some(raiz) = self.raizes.iter().find(|r| r.join("steamapps").is_dir()) else {
             return resultado; // Steam não instalada: lista vazia, não é erro
         };
+        let bibliotecas = bibliotecas(raiz, &mut resultado.avisos);
+        // Cada biblioteca costuma estar num disco diferente, e um disco ausente leva segundos
+        // para responder. Ler uma de cada vez somaria as esperas; lê todas ao mesmo tempo.
+        let leituras: Vec<Deteccao> = thread::scope(|escopo| {
+            let tarefas: Vec<_> = bibliotecas
+                .iter()
+                .map(|biblioteca| escopo.spawn(move || ler_biblioteca(biblioteca)))
+                .collect();
+            tarefas
+                .into_iter()
+                .map(|tarefa| {
+                    tarefa.join().unwrap_or_else(|_| Deteccao {
+                        avisos: vec!["falha inesperada ao ler uma biblioteca".to_owned()],
+                        ..Deteccao::default()
+                    })
+                })
+                .collect()
+        });
         let mut vistos = HashSet::new();
-        for biblioteca in bibliotecas(raiz, &mut resultado.avisos) {
-            ler_biblioteca(&biblioteca, &mut vistos, &mut resultado);
+        for leitura in leituras {
+            resultado.avisos.extend(leitura.avisos);
+            for jogo in leitura.jogos {
+                if vistos.insert(jogo.id_externo.clone()) {
+                    resultado.jogos.push(jogo);
+                }
+            }
         }
         resultado.jogos.sort_by_key(|jogo| jogo.nome.to_lowercase());
         resultado
@@ -79,12 +103,13 @@ fn id_numerico(id: &str) -> bool {
 /// A pasta da Steam e as demais bibliotecas listadas em `libraryfolders.vdf`, sem repetir.
 fn bibliotecas(raiz: &Path, avisos: &mut Vec<String>) -> Vec<PathBuf> {
     let mut lista = vec![raiz.to_path_buf()];
+    let mut chaves = HashSet::from([chave_da_pasta(raiz)]);
     let arquivo = raiz.join("steamapps").join("libraryfolders.vdf");
     match fs::read_to_string(&arquivo) {
         Ok(texto) => match vdf::analisar(&texto) {
             Ok(valor) => {
                 for caminho in caminhos_das_bibliotecas(&valor) {
-                    if !lista.iter().any(|a| mesma_pasta(a, &caminho)) {
+                    if chaves.insert(chave_da_pasta(&caminho)) {
                         lista.push(caminho);
                     }
                 }
@@ -97,12 +122,19 @@ fn bibliotecas(raiz: &Path, avisos: &mut Vec<String>) -> Vec<PathBuf> {
     lista
 }
 
-/// Compara pastas pelo caminho real quando existem (o registro do Windows usa `c:/steam`
-/// e o VDF usa `C:\Steam`); se uma não existe, compara o texto.
-fn mesma_pasta(a: &Path, b: &Path) -> bool {
-    match (fs::canonicalize(a), fs::canonicalize(b)) {
-        (Ok(a), Ok(b)) => a == b,
-        _ => a == b,
+/// Chave para reconhecer a mesma pasta escrita de jeitos diferentes (o registro do Windows
+/// guarda `c:/steam` e o VDF guarda `C:\Steam`). É só texto, de propósito: perguntar ao disco
+/// (`canonicalize`) custa segundos por consulta quando a unidade está ausente.
+// shortcut: não resolve links simbólicos; dois links para a mesma pasta só repetem avisos.
+fn chave_da_pasta(pasta: &Path) -> String {
+    let texto = pasta.to_string_lossy();
+    if cfg!(windows) {
+        texto
+            .replace('\\', "/")
+            .trim_end_matches('/')
+            .to_lowercase()
+    } else {
+        texto.trim_end_matches('/').to_owned()
     }
 }
 
@@ -121,14 +153,17 @@ fn caminhos_das_bibliotecas(documento: &Valor) -> Vec<PathBuf> {
         .collect()
 }
 
-fn ler_biblioteca(biblioteca: &Path, vistos: &mut HashSet<String>, resultado: &mut Deteccao) {
+/// Lê os manifestos de uma biblioteca. Uma única sondagem do disco: se `steamapps` não abre,
+/// a biblioteca vira aviso e nada mais é consultado nela.
+fn ler_biblioteca(biblioteca: &Path) -> Deteccao {
+    let mut resultado = Deteccao::default();
     let apps = biblioteca.join("steamapps");
     let Ok(entradas) = fs::read_dir(&apps) else {
         resultado.avisos.push(format!(
             "Biblioteca indisponível: {} (disco desconectado?)",
             biblioteca.display()
         ));
-        return;
+        return resultado;
     };
     for entrada in entradas.flatten() {
         let nome = entrada.file_name();
@@ -137,15 +172,12 @@ fn ler_biblioteca(biblioteca: &Path, vistos: &mut HashSet<String>, resultado: &m
             continue;
         }
         match ler_manifesto(&entrada.path(), &apps) {
-            Ok(Some(jogo)) => {
-                if vistos.insert(jogo.id_externo.clone()) {
-                    resultado.jogos.push(jogo);
-                }
-            }
+            Ok(Some(jogo)) => resultado.jogos.push(jogo),
             Ok(None) => {}
             Err(aviso) => resultado.avisos.push(aviso),
         }
     }
+    resultado
 }
 
 /// `Ok(None)` quando o app existe mas não é um jogo instalado (em download, redistribuível).
@@ -442,6 +474,62 @@ mod testes {
 
         assert_eq!(resultado.jogos.len(), 1);
         assert!(resultado.avisos.is_empty());
+    }
+
+    #[test]
+    fn chave_da_pasta_ignora_barra_final() {
+        assert_eq!(
+            chave_da_pasta(Path::new("/jogos/steam/")),
+            chave_da_pasta(Path::new("/jogos/steam"))
+        );
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn chave_da_pasta_junta_as_grafias_do_registro_e_do_vdf_no_windows() {
+        assert_eq!(
+            chave_da_pasta(Path::new("c:/program files (x86)/steam")),
+            chave_da_pasta(Path::new(r"C:\Program Files (x86)\Steam\"))
+        );
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn raiz_do_registro_com_barras_normais_nao_duplica_a_biblioteca_do_vdf() {
+        let tmp = TempDir::new().unwrap();
+        let raiz = tmp.path().join("steam");
+        biblioteca(&raiz, &[("10", "Unico", "Unico", 4, 1, true)]);
+        escrever_vdf(&raiz, &vdf_das_bibliotecas(&[&raiz]));
+        let como_no_registro =
+            PathBuf::from(raiz.to_string_lossy().replace('\\', "/").to_lowercase());
+
+        let resultado = Steam::com_raizes(vec![como_no_registro]).detectar();
+
+        assert_eq!(resultado.jogos.len(), 1);
+        assert!(resultado.avisos.is_empty(), "{:?}", resultado.avisos);
+    }
+
+    #[test]
+    fn varias_bibliotecas_sao_lidas_e_os_avisos_seguem_a_ordem_do_vdf() {
+        let tmp = TempDir::new().unwrap();
+        let raiz = tmp.path().join("steam");
+        let (b, c) = (tmp.path().join("b"), tmp.path().join("c"));
+        let (ausente1, ausente2) = (tmp.path().join("ausente1"), tmp.path().join("ausente2"));
+        biblioteca(&raiz, &[("1", "Raiz", "Raiz", 4, 1, true)]);
+        biblioteca(&b, &[("2", "Be", "Be", 4, 1, true)]);
+        biblioteca(&c, &[("3", "Ce", "Ce", 4, 1, true)]);
+        escrever_vdf(
+            &raiz,
+            &vdf_das_bibliotecas(&[&raiz, &ausente1, &b, &ausente2, &c]),
+        );
+
+        let resultado = Steam::com_raizes(vec![raiz]).detectar();
+
+        let nomes: Vec<_> = resultado.jogos.iter().map(|j| j.nome.as_str()).collect();
+        assert_eq!(nomes, ["Be", "Ce", "Raiz"]);
+        assert_eq!(resultado.avisos.len(), 2);
+        assert!(resultado.avisos[0].contains("ausente1"));
+        assert!(resultado.avisos[1].contains("ausente2"));
     }
 
     #[test]

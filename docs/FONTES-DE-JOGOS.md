@@ -36,6 +36,7 @@ Varrer vários discos com milhões de arquivos leva **minutos**. Por isso a varr
 
 - **Disco ausente ou com defeito.** As bibliotecas da Steam e o registro podem apontar para unidades que não estão montadas. O jogo aparece como *indisponível*; ele **nunca** é removido da biblioteca sozinho.
 - **Restos de instalação.** Pastas em `steamapps/common` sem `appmanifest` correspondente existem e não são jogos instalados.
+- **Disco ausente é lento.** Cada acesso a uma unidade ausente (leitor de cartão vazio, disco USB solto) leva vários segundos para falhar; foram medidos cerca de 4,7 s por consulta. A fonte sonda cada biblioteca uma única vez e lê todas ao mesmo tempo: com 8 bibliotecas, a detecção caiu de 28,9 s para 2,2 s.
 - **Caminhos.** No VDF a barra invertida vem escapada (`C:\\Steam`), e o registro do Windows guarda `c:/steam`. Compare pastas pelo caminho real, senão a mesma biblioteca é lida duas vezes.
 - **Codificação.** Os manifestos da Epic são UTF-8; lê-los em outra codificação corrompe os acentos dos nomes.
 - **Estado parcial.** O `StateFlags` da Steam pode indicar instalação completa com atualização pendente; o tamanho informado pode mudar depois da atualização.
