@@ -1,7 +1,7 @@
 # Arquitetura-alvo
 
 > **O que é:** a organização em camadas proposta para o aplicativo.
-> **Status:** em implementação na Fase 1. Já existe `crates/fontes`; `biblioteca`, `varredura`, `acoes`, `src-tauri` e `ui` ainda não. O contrato pode mudar quando a segunda fonte for escrita; qualquer mudança vira uma entrada nova no `IA.md`.
+> **Status:** em implementação na Fase 1. Já existem `crates/fontes` e `crates/biblioteca`; `varredura`, `acoes`, `src-tauri` e `ui` ainda não. O contrato pode mudar quando a segunda fonte for escrita; qualquer mudança vira uma entrada nova no `IA.md`.
 > **Quando usar:** antes de criar um módulo, uma fonte nova ou qualquer ação que altere arquivos. As decisões de base estão em [DECISOES.md](DECISOES.md) e as fontes em [FONTES-DE-JOGOS.md](FONTES-DE-JOGOS.md).
 
 ## Camadas

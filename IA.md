@@ -113,3 +113,14 @@
 - **Medido:** 24 testes verdes e `clippy -D warnings` limpo. Contra uma instalação real da Steam, o exemplo achou 30 jogos, os mesmos de um levantamento feito à mão, e transformou a biblioteca de um disco ausente em aviso.
 - **Achado de ambiente:** o toolchain `gnu` do Rust com o gcc do MSYS2 falha ao linkar quando o diretório de build tem acento no caminho: o `ld.exe` não encontra os objetos. Definir `CARGO_TARGET_DIR` num caminho ASCII resolve.
 - **Limitação:** a abertura (`steam://rungameid/...`) só foi testada com identificadores inválidos; a abertura de verdade depende do aplicativo.
+
+---
+
+## 05/11/2026 — Biblioteca local em SQLite
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `crates/biblioteca`, a camada que guarda os jogos detectados.
+- **Decisões:** o esquema é versionado por `PRAGMA user_version`, e um banco criado por versão mais nova é recusado sem tocar no arquivo. A sincronização roda numa transação só. O banco usa WAL e espera até 5 s por trava, porque a varredura e o observador gravam ao mesmo tempo. A busca trata `%` e `_` digitados como texto, e o `ORDER BY` vem de um enum, nunca de texto do usuário.
+- **Regra central, testada:** jogo que some da detecção fica indisponível e guarda a última vez em que foi visto; nunca é removido. Sincronizar uma fonte não mexe nas outras.
+- **Medido:** 14 testes verdes (incluindo reabrir o arquivo, duas conexões gravando e versão futura) e `clippy -D warnings` limpo no workspace.
+- **Limitações:** o `LIKE` do SQLite ignora maiúsculas só em ASCII, então a busca sem acento fica para depois. Caminhos que não são UTF-8 são gravados com perda.

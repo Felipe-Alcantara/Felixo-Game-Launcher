@@ -1,0 +1,21 @@
+[package]
+name = "felixo-biblioteca"
+version = "0.0.0"
+description = "Biblioteca local de jogos em SQLite."
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+felixo-fontes = { version = "0.0.0", path = "../fontes" }
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2.0.21"
+
+[dev-dependencies]
+tempfile = "3.27.0"
