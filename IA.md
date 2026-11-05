@@ -136,3 +136,12 @@
 - **Achado de acessibilidade:** a borda dos campos e botões tinha 1,4:1 a 1,6:1 de contraste, abaixo dos 3:1 exigidos para elementos de interface. Ganhou um token próprio (`--borda-controle`, acima de 4,4:1). Os textos ficaram entre 7,3:1 e 18,4:1. As razões foram calculadas, não estimadas.
 - **Medido:** checagem de tipos limpa, 18 testes, build de produção (JS de cerca de 8 kB) e `npm audit` sem vulnerabilidades. No navegador, com a simulação: busca, ordenação (tamanho desconhecido por último), troca de idioma, 0 campos sem rótulo, 0 botões sem nome acessível, foco visível e nenhum erro no console. Um nome de jogo com `<img onerror=…>` apareceu como texto e a página ficou com 0 imagens.
 - **Limitações:** os avisos da detecção chegam em português do núcleo (marcado como `shortcut` no código). A tela ainda não rodou dentro do Tauri. O leiaute estreito (celular) foi escrito em CSS mas não foi testado em tela pequena.
+
+---
+
+## 05/11/2026 — Abrir jogo pela biblioteca
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `Biblioteca::abrir_jogo` e os erros `JogoNaoEncontrado`, `JogoIndisponivel`, `FonteDesconhecida` e `Fonte`.
+- **Decisão:** a regra "jogo indisponível não abre" mora na biblioteca, não no shell do Tauri. A arquitetura diz que a borda não tem regra de negócio, e assim a regra é testável com uma fonte falsa, sem abrir janela. Abrir um jogo de disco ausente faria o launcher original tentar reinstalá-lo ou falhar de forma confusa.
+- **Medido:** 19 testes na biblioteca (5 novos, incluindo o que garante que a fonte não é chamada quando o jogo está indisponível) e `clippy -D warnings` limpo.

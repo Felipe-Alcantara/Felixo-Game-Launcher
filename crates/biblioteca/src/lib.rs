@@ -8,7 +8,7 @@ use std::fs;
 use std::path::Path;
 use std::time::Duration;
 
-use felixo_fontes::JogoDetectado;
+use felixo_fontes::{ErroFonte, Fonte, JogoDetectado};
 use rusqlite::{params, Connection, OptionalExtension, Row};
 use serde::{Deserialize, Serialize};
 
@@ -37,6 +37,18 @@ pub enum ErroBiblioteca {
         encontrada: String,
         jogo: String,
     },
+
+    #[error("jogo não encontrado na biblioteca")]
+    JogoNaoEncontrado,
+
+    #[error("o jogo está indisponível agora (disco desconectado ou jogo removido)")]
+    JogoIndisponivel,
+
+    #[error("nenhuma fonte conhece {0:?}")]
+    FonteDesconhecida(String),
+
+    #[error(transparent)]
+    Fonte(#[from] ErroFonte),
 }
 
 /// Um jogo já guardado na biblioteca.
@@ -202,6 +214,23 @@ impl Biblioteca {
         let sql = format!("SELECT {COLUNAS} FROM jogos WHERE id = ?1");
         Ok(self.conexao.query_row(&sql, [id], ler_jogo).optional()?)
     }
+
+    /// Abre um jogo da biblioteca pelo launcher da fonte de onde ele veio.
+    ///
+    /// Jogo indisponível não abre: o launcher original tentaria reinstalá-lo ou falharia de
+    /// forma confusa, e quem decide o que fazer com um disco ausente é o usuário.
+    pub fn abrir_jogo(&self, id: i64, fontes: &[Box<dyn Fonte>]) -> Result<(), ErroBiblioteca> {
+        let jogo = self.obter(id)?.ok_or(ErroBiblioteca::JogoNaoEncontrado)?;
+        if !jogo.disponivel {
+            return Err(ErroBiblioteca::JogoIndisponivel);
+        }
+        let fonte = fontes
+            .iter()
+            .find(|fonte| fonte.id() == jogo.fonte)
+            .ok_or_else(|| ErroBiblioteca::FonteDesconhecida(jogo.fonte.clone()))?;
+        fonte.abrir(&jogo.id_externo)?;
+        Ok(())
+    }
 }
 
 fn migrar(conexao: &Connection) -> Result<(), ErroBiblioteca> {
@@ -259,7 +288,9 @@ fn padrao_like(busca: &str) -> String {
 #[cfg(test)]
 mod testes {
     use std::path::PathBuf;
+    use std::sync::{Arc, Mutex};
 
+    use felixo_fontes::Deteccao;
     use rusqlite::Connection;
     use tempfile::TempDir;
 
@@ -565,6 +596,109 @@ mod testes {
             .query_row("PRAGMA user_version", [], |l| l.get(0))
             .unwrap();
         assert_eq!(versao, 99);
+    }
+
+    /// Fonte de mentira que só anota o que lhe pediram para abrir.
+    struct FonteFalsa {
+        id: &'static str,
+        falha: bool,
+        abertos: Arc<Mutex<Vec<String>>>,
+    }
+
+    impl Fonte for FonteFalsa {
+        fn id(&self) -> &'static str {
+            self.id
+        }
+        fn nome(&self) -> &'static str {
+            "Falsa"
+        }
+        fn detectar(&self) -> Deteccao {
+            Deteccao::default()
+        }
+        fn abrir(&self, id_externo: &str) -> Result<(), ErroFonte> {
+            if self.falha {
+                return Err(ErroFonte::IdInvalido(id_externo.to_owned()));
+            }
+            self.abertos.lock().unwrap().push(id_externo.to_owned());
+            Ok(())
+        }
+    }
+
+    fn biblioteca_com_um_jogo(disponivel: bool) -> (Biblioteca, i64) {
+        let mut b = Biblioteca::em_memoria().unwrap();
+        b.sincronizar(
+            "falsa",
+            &[detectado("falsa", "777", "Alfa", None, disponivel)],
+            1,
+        )
+        .unwrap();
+        let id = b.listar(&Filtro::default()).unwrap()[0].id;
+        (b, id)
+    }
+
+    type Abertos = Arc<Mutex<Vec<String>>>;
+
+    fn fontes(falha: bool) -> (Vec<Box<dyn Fonte>>, Abertos) {
+        let abertos = Arc::new(Mutex::new(Vec::new()));
+        let fonte = FonteFalsa {
+            id: "falsa",
+            falha,
+            abertos: Arc::clone(&abertos),
+        };
+        (vec![Box::new(fonte)], abertos)
+    }
+
+    #[test]
+    fn abrir_jogo_chama_a_fonte_com_o_id_externo() {
+        let (b, id) = biblioteca_com_um_jogo(true);
+        let (fontes, abertos) = fontes(false);
+
+        b.abrir_jogo(id, &fontes).unwrap();
+
+        assert_eq!(*abertos.lock().unwrap(), ["777"]);
+    }
+
+    #[test]
+    fn abrir_jogo_indisponivel_e_recusado_sem_chamar_a_fonte() {
+        let (b, id) = biblioteca_com_um_jogo(false);
+        let (fontes, abertos) = fontes(false);
+
+        let erro = b.abrir_jogo(id, &fontes).unwrap_err();
+
+        assert!(matches!(erro, ErroBiblioteca::JogoIndisponivel));
+        assert!(abertos.lock().unwrap().is_empty());
+    }
+
+    #[test]
+    fn abrir_jogo_que_nao_existe_e_recusado() {
+        let (b, id) = biblioteca_com_um_jogo(true);
+        let (fontes, _) = fontes(false);
+
+        let erro = b.abrir_jogo(id + 1, &fontes).unwrap_err();
+
+        assert!(matches!(erro, ErroBiblioteca::JogoNaoEncontrado));
+    }
+
+    #[test]
+    fn abrir_jogo_de_fonte_que_nao_existe_mais_e_recusado() {
+        let (b, id) = biblioteca_com_um_jogo(true);
+
+        let erro = b.abrir_jogo(id, &[]).unwrap_err();
+
+        assert!(matches!(erro, ErroBiblioteca::FonteDesconhecida(f) if f == "falsa"));
+    }
+
+    #[test]
+    fn abrir_jogo_propaga_o_erro_da_fonte() {
+        let (b, id) = biblioteca_com_um_jogo(true);
+        let (fontes, _) = fontes(true);
+
+        let erro = b.abrir_jogo(id, &fontes).unwrap_err();
+
+        assert!(matches!(
+            erro,
+            ErroBiblioteca::Fonte(ErroFonte::IdInvalido(_))
+        ));
     }
 
     #[test]
