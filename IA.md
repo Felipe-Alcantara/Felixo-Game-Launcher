@@ -227,3 +227,13 @@
 - **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
 - **Mudança:** o README (em português e em inglês) passa a dizer o que o aplicativo já faz, sem prometer instalador, e o roadmap ganha a coluna "Estado": Fase 0 feita, Fase 1 em andamento, as demais por fazer.
 - **Cuidado:** o texto diz com todas as letras que o botão Jogar ainda não foi testado de ponta a ponta e que não há instalador para baixar. Isso muda quando a primeira Release existir e for conferida.
+
+---
+
+## 05/11/2026 — Resultado do CI do Rust e da interface
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Resultado medido:** execução [42063499358](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/actions/runs/42063499358) no commit `a54f754`: **10 de 10 jobs verdes**. São os 6 de qualidade (Python 3.11 e 3.13), a interface (tipos, testes, build e `npm audit`) e o Rust em Ubuntu, Windows e macOS (`fmt`, `clippy -D warnings` e testes, com `--locked`).
+- **O que isso prova:** o aplicativo Tauri compila e passa no `clippy` nos três sistemas, e o Windows do GitHub usa o toolchain MSVC, que não existe no computador do autor. Até aqui o Rust só tinha rodado com o toolchain GNU.
+- **O que não prova:** abrir um jogo de verdade, nem que os instaladores sejam gerados; o `cargo` do CI não empacota. O shell tem `test = false`, então a suposição de que o executável de teste do Tauri também quebra no MSVC continua não medida.
+- **Próximo:** a tag `v0.1.0` foi enviada para exercitar o workflow de Release pela primeira vez; o resultado entra em entrada própria.
