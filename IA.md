@@ -62,3 +62,13 @@
 - **O que a execução real achou:** rodando o menu por pipe no PowerShell 5.1, a primeira linha chegou com um BOM (`﻿`) e a opção válida foi recusada. Os testes unitários não pegavam isso. A leitura de entrada foi centralizada em `Contexto.perguntar`, que descarta o BOM, e ganhou teste de regressão.
 - **Limitação declarada (shortcut):** "Iniciar" só avisa que o aplicativo não existe; deve ser ligado ao `npm run tauri dev` na Fase 1.
 - **Validação:** testes automatizados do menu, da configuração e dos caminhos por sistema (Windows, macOS e Linux simulados). O CI nos três sistemas entra na entrada "CI em Windows, Linux e macOS".
+
+---
+
+## 05/11/2026 — Verificação de links internos
+
+- **Mudança:** `scripts/qualidade/verificar_links.py` e `tests/test_verificar_links.py`.
+- **Motivo:** o critério de pronto do padrão inclui "links internos válidos". Com tanta documentação ligada entre si, conferir à mão não escala.
+- **Decisão:** ignora links externos, âncoras puras e qualquer coisa dentro de código; todo o resto que parece link precisa apontar para um arquivo que exista.
+- **Validação:** testes cobrindo link bom, quebrado (com arquivo e linha), âncora, código e pastas ignoradas; rodado sobre o próprio repositório.
+- **Limitação:** não confere se a âncora (`#secao`) existe dentro do arquivo.
