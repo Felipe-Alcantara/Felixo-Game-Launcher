@@ -4,7 +4,7 @@
 
 [Read in English](README.en.md)
 
-**Estado:** em fundação. Já existem o repositório, a documentação, o menu de entrada e o CI nos três sistemas. O aplicativo em si (Tauri) começa na Fase 1 do [roadmap](docs/ESCOPO-E-ROADMAP.md) — **ainda não há nada para baixar**.
+**Estado:** Fase 1 em andamento. O aplicativo (Tauri) já lista os jogos instalados da Steam, com busca, ordenação por tamanho e atualização ao abrir. O botão Jogar existe, mas ainda não foi testado de ponta a ponta. Veja o [roadmap](docs/ESCOPO-E-ROADMAP.md). **Ainda não há instalador para baixar.**
 
 ## O que é
 

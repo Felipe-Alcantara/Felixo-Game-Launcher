@@ -219,3 +219,11 @@
 - **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
 - **Mudança:** a versão do aplicativo (`tauri.conf.json`, `src-tauri/Cargo.toml`, `package.json` e os lockfiles) passa de 0.0.0 para 0.1.0. Os crates internos continuam em 0.0.0, porque não são publicados.
 - **Motivo:** os instaladores da Release herdam a versão do `tauri.conf.json`; uma tag `v0.1.0` com binários chamados 0.0.0 confundiria quem baixa.
+
+---
+
+## 05/11/2026 — Estado da Fase 1 no README e no roadmap
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** o README (em português e em inglês) passa a dizer o que o aplicativo já faz, sem prometer instalador, e o roadmap ganha a coluna "Estado": Fase 0 feita, Fase 1 em andamento, as demais por fazer.
+- **Cuidado:** o texto diz com todas as letras que o botão Jogar ainda não foi testado de ponta a ponta e que não há instalador para baixar. Isso muda quando a primeira Release existir e for conferida.

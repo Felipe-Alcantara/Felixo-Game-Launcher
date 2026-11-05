@@ -4,7 +4,7 @@
 
 [Leia em português](README.md)
 
-**Status:** foundation phase. The repository, documentation, entry menu and CI on all three systems exist. The application itself (Tauri) starts in Phase 1 of the [roadmap](docs/ESCOPO-E-ROADMAP.md) — **there is nothing to download yet**. The detailed docs are written in Portuguese.
+**Status:** Phase 1 in progress. The application (Tauri) already lists the installed Steam games, with search, size sorting and a refresh on startup. The Play button exists but has not been tested end to end yet. See the [roadmap](docs/ESCOPO-E-ROADMAP.md). **There is no installer to download yet.** The detailed docs are written in Portuguese.
 
 ## What it is
 
