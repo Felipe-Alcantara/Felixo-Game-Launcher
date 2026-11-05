@@ -67,6 +67,17 @@ Para ver o que a fonte da Steam detecta neste computador, sem abrir o aplicativo
 cargo run -p felixo-fontes --example detectar
 ```
 
+## Conferir um instalador sem instalar
+
+Para ver se o binário publicado numa Release funciona, sem mexer no sistema, num diretório novo e vazio:
+
+```powershell
+gh release download v0.1.0 --pattern "*x64_en-US.msi" --dir C:\tmp\conferir
+msiexec /a C:\tmp\conferir\Felixo.Game.Launcher_0.1.0_x64_en-US.msi /qn TARGETDIR=C:\tmp\conferir\extraido
+```
+
+O `msiexec /a` só extrai os arquivos. Para inspecionar a janela, inicie o executável com `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9223` e conecte por CDP em `http://127.0.0.1:9223/json`. Em produção a página é `http://tauri.localhost/`; se aparecer `localhost:1420`, o app está carregando o servidor de desenvolvimento.
+
 ## Armadilhas já medidas
 
 - **PowerShell 5.1 e pipes.** Ele antepõe um BOM (`\ufeff`) à primeira linha enviada por pipe a um programa nativo. O menu `start_app.py` já descarta esse caractere.

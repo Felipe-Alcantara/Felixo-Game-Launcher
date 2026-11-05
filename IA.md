@@ -237,3 +237,13 @@
 - **O que isso prova:** o aplicativo Tauri compila e passa no `clippy` nos três sistemas, e o Windows do GitHub usa o toolchain MSVC, que não existe no computador do autor. Até aqui o Rust só tinha rodado com o toolchain GNU.
 - **O que não prova:** abrir um jogo de verdade, nem que os instaladores sejam gerados; o `cargo` do CI não empacota. O shell tem `test = false`, então a suposição de que o executável de teste do Tauri também quebra no MSVC continua não medida.
 - **Próximo:** a tag `v0.1.0` foi enviada para exercitar o workflow de Release pela primeira vez; o resultado entra em entrada própria.
+
+---
+
+## 05/11/2026 — Release v0.1.0 publicada e conferida no Windows
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Resultado medido:** a [Release v0.1.0](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/releases/tag/v0.1.0) saiu da execução `42064331955`, com os três jobs verdes (Windows, Ubuntu 22.04 e macOS), como pré-lançamento. Arquivos: `.exe` e `.msi` (Windows, 2,6 e 3,8 MB), `.deb`, `.rpm` e `.AppImage` (Linux) e `.dmg` e `.app.tar.gz` (macOS, Apple Silicon).
+- **Conferido de verdade:** o `.msi` foi baixado numa pasta vazia, extraído com `msiexec /a` (sem instalar; SHA-256 `5BCFFA5C6742CBAD2CDB7D227C977257E95A884B62F0B754E1DE8E83FE1A7FC7`) e o executável de produção (MSVC, 10,4 MB) foi rodado com a janela inspecionada por depuração remota. A página era `http://tauri.localhost/`, sem servidor de desenvolvimento; a tela mostrou 30 jogos, o aviso do disco ausente, o CSS carregado sob a CSP e o console vazio; o banco ficou com 30 jogos.
+- **Não conferido:** os pacotes de Linux e macOS não foram abertos por ninguém, só gerados. Não há build para Mac com Intel. O botão Jogar segue sem teste de ponta a ponta.
+- **Correção de uma suposição:** a entrada "Release por tag" dizia que o workflow nunca tinha rodado e que o MSVC era um risco; agora o MSVC compilou o shell no CI e gerou um executável que funciona.

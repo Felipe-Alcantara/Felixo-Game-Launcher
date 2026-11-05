@@ -4,7 +4,7 @@
 
 [Read in English](README.en.md)
 
-**Estado:** Fase 1 em andamento. O aplicativo (Tauri) já lista os jogos instalados da Steam, com busca, ordenação por tamanho e atualização ao abrir. O botão Jogar existe, mas ainda não foi testado de ponta a ponta. Veja o [roadmap](docs/ESCOPO-E-ROADMAP.md). **Ainda não há instalador para baixar.**
+**Estado:** Fase 1 entregue como pré-lançamento (v0.1.0). O aplicativo (Tauri) lista os jogos instalados da Steam, com busca, ordenação por tamanho e atualização ao abrir. O botão Jogar existe, mas ainda não foi testado de ponta a ponta. Veja o [roadmap](docs/ESCOPO-E-ROADMAP.md).
 
 ## O que é
 
@@ -20,6 +20,18 @@ Ele **não instala nem atualiza** jogos: isso continua sendo da loja. O foco é 
 - Favoritos, tags, coleções, busca e histórico de uso.
 - Tudo local: sem login em loja e sem enviar nada para a internet.
 - Português e inglês, com binários pelas Releases do GitHub. Windows completo; Linux e macOS com limitações documentadas.
+
+## Baixar
+
+A [Release v0.1.0](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/releases/tag/v0.1.0) é um **pré-lançamento sem assinatura de código**.
+
+| Sistema | Arquivo | Situação |
+| --- | --- | --- |
+| Windows | `Felixo.Game.Launcher_0.1.0_x64-setup.exe` ou `..._x64_en-US.msi` | O executável do `.msi` foi aberto e listou os jogos da Steam. |
+| Linux | `.AppImage`, `.deb` ou `.rpm` | O pacote é gerado pelo CI, mas ninguém o abriu ainda. |
+| macOS (Apple Silicon) | `.dmg` | O pacote é gerado pelo CI, mas ninguém o abriu ainda. Não há build para Mac com Intel. |
+
+Como não há assinatura, o Windows pode mostrar o aviso do SmartScreen e o macOS pode pedir para abrir pelo menu de contexto (botão direito, Abrir). A assinatura está em avaliação.
 
 ## Como usar hoje
 

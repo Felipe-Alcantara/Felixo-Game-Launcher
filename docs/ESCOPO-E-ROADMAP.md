@@ -35,8 +35,8 @@ A ordem é uma proposta e pode ser ajustada. Cada fase termina com algo que roda
 | Fase | Entrega | Utilizável? | Estado |
 | --- | --- | --- | --- |
 | 0 | Fundação: repositório, documentação, menu `start_app.py` e CI nos três sistemas | Não, só a base | Feita |
-| 1 | Esqueleto Tauri e núcleo, com a Steam: lista os jogos instalados, busca, ordena por tamanho e abre pela Steam | Sim — primeira entrega | Em andamento: lista, busca, ordenação, atualizar e Jogar prontos; falta a primeira Release e testar o Jogar de ponta a ponta |
-| 2 | Epic e GOG, abertura híbrida, jogos avulsos por pasta, idioma pt-BR e en, primeira Release | Sim | A fazer |
+| 1 | Esqueleto Tauri e núcleo, com a Steam: lista os jogos instalados, busca, ordena por tamanho e abre pela Steam | Sim — primeira entrega | Feita no código e publicada como v0.1.0 (pré-lançamento); falta testar o Jogar de ponta a ponta |
+| 2 | Epic e GOG, abertura híbrida, jogos avulsos por pasta, idioma pt-BR e en | Sim | A fazer |
 | 3 | Riot, Ubisoft, Battle.net, Rockstar e EA; Minecraft, Roblox, osu! e Microsoft Store; emuladores | Sim | A fazer |
 | 4 | Varredura completa em segundo plano e observador de pastas | Sim | A fazer |
 | 5 | Gestão de espaço (duplicados, mover e apagar com travas), organização e histórico de uso | Sim | A fazer |

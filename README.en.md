@@ -4,7 +4,7 @@
 
 [Leia em português](README.md)
 
-**Status:** Phase 1 in progress. The application (Tauri) already lists the installed Steam games, with search, size sorting and a refresh on startup. The Play button exists but has not been tested end to end yet. See the [roadmap](docs/ESCOPO-E-ROADMAP.md). **There is no installer to download yet.** The detailed docs are written in Portuguese.
+**Status:** Phase 1 delivered as a pre-release (v0.1.0). The application (Tauri) lists the installed Steam games, with search, size sorting and a refresh on startup. The Play button exists but has not been tested end to end yet. See the [roadmap](docs/ESCOPO-E-ROADMAP.md). The detailed docs are written in Portuguese.
 
 ## What it is
 
@@ -20,6 +20,18 @@ It **does not install or update** games: that stays with each store. The focus i
 - Favorites, tags, collections, search and play history.
 - Fully local: no store login and nothing is sent to the internet.
 - Portuguese and English, with binaries on GitHub Releases. Full support on Windows; Linux and macOS with documented limitations.
+
+## Download
+
+[Release v0.1.0](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/releases/tag/v0.1.0) is a **pre-release without code signing**.
+
+| System | File | Status |
+| --- | --- | --- |
+| Windows | `Felixo.Game.Launcher_0.1.0_x64-setup.exe` or `..._x64_en-US.msi` | The `.msi` executable was opened and listed the Steam games. |
+| Linux | `.AppImage`, `.deb` or `.rpm` | The package is built by CI, but nobody has opened it yet. |
+| macOS (Apple Silicon) | `.dmg` | The package is built by CI, but nobody has opened it yet. There is no Intel Mac build. |
+
+Without a signature, Windows may show the SmartScreen warning and macOS may ask you to open it from the context menu (right click, Open). Signing is under evaluation.
 
 ## Using it today
 
