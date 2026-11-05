@@ -51,3 +51,14 @@
 - **Decisão pequena:** `uv` (já usado nos outros projetos do autor), com `package = false` porque não há pacote Python a publicar.
 - **Validação:** `uv sync --locked` reproduz o ambiente a partir do lockfile.
 - **Limitação:** não há dependência de execução para auditar. A auditoria de dependências entra quando o aplicativo (Fase 1) trouxer pacotes de Rust e de Node.
+
+---
+
+## 05/11/2026 — Menu de entrada start_app.py
+
+- **Mudança:** `start_app.py` e `tests/test_start_app.py`.
+- **Motivo:** o padrão Felixo exige um menu interativo como porta de entrada de todo programa. Menu mínimo: Iniciar, Instalar/Setup, Configurar e Status/Sair.
+- **Decisões:** usa só a biblioteca padrão, para rodar antes de qualquer instalação; textos em pt-BR e en (decisão 17); configuração em JSON na pasta de configuração de cada sistema, gravada por arquivo temporário para nunca ficar pela metade; fim da entrada (Ctrl+D ou Ctrl+C) encerra sem erro.
+- **O que a execução real achou:** rodando o menu por pipe no PowerShell 5.1, a primeira linha chegou com um BOM (`﻿`) e a opção válida foi recusada. Os testes unitários não pegavam isso. A leitura de entrada foi centralizada em `Contexto.perguntar`, que descarta o BOM, e ganhou teste de regressão.
+- **Limitação declarada (shortcut):** "Iniciar" só avisa que o aplicativo não existe; deve ser ligado ao `npm run tauri dev` na Fase 1.
+- **Validação:** testes automatizados do menu, da configuração e dos caminhos por sistema (Windows, macOS e Linux simulados). O CI nos três sistemas entra na entrada "CI em Windows, Linux e macOS".
