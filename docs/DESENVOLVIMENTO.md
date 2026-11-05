@@ -71,6 +71,6 @@ cargo run -p felixo-fontes --example detectar
 
 - **PowerShell 5.1 e pipes.** Ele antepõe um BOM (`\ufeff`) à primeira linha enviada por pipe a um programa nativo. O menu `start_app.py` já descarta esse caractere.
 - **PowerShell 5.1 e arquivos.** `Set-Content -Encoding utf8` grava UTF-8 *com* BOM e quebras CRLF. O repositório usa UTF-8 sem BOM e LF (`.editorconfig` e `.gitattributes`); grave com `[IO.File]::WriteAllText` e `UTF8Encoding($false)`.
-- **Testes do shell Tauri.** O executável de teste de um crate Tauri não abre no Windows (`0xC0000139`, falta o manifesto do Common Controls v6), com MSVC ou GNU. Por isso o shell não tem testes de unidade e o contrato com a interface vive em `crates/ipc`.
+- **Testes do shell Tauri.** O executável de teste de um crate Tauri não abre no Windows (`0xC0000139`, falta o manifesto do Common Controls v6). Foi medido com o toolchain GNU; é um problema conhecido do Tauri também com o MSVC, mas não foi reproduzido aqui. Por isso o shell não tem testes de unidade e o contrato com a interface vive em `crates/ipc`.
 - **Disco ausente é lento.** Uma unidade ausente leva vários segundos para falhar em cada acesso; veja [FONTES-DE-JOGOS.md](FONTES-DE-JOGOS.md).
 - **Mover e apagar arquivos.** Os testes dessas ações usam só pastas temporárias, nunca jogos reais. Veja as travas em [ARQUITETURA.md](ARQUITETURA.md).

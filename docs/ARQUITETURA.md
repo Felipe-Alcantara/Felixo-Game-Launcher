@@ -13,7 +13,7 @@
 | `crates/varredura` | Varredura em segundo plano e observador de pastas | Não grava direto: entrega resultados à biblioteca |
 | `crates/acoes` | Mover e apagar arquivos, isolado e com as travas abaixo | Não decide o que apagar: recebe um pedido já confirmado |
 | `crates/ipc` | Contrato com a interface: os erros e o resultado de atualizar que atravessam a ponte do Tauri | Não conhece o Tauri, para ser testável em qualquer sistema |
-| `src-tauri` | Borda: comandos entre a interface e o núcleo | **Sem regra de negócio** e sem testes de unidade (o executável de teste de um crate Tauri não abre no Windows) |
+| `src-tauri` | Borda: comandos entre a interface e o núcleo | **Sem regra de negócio** e sem testes de unidade (o executável de teste de um crate Tauri não abre no Windows; medido com o toolchain GNU) |
 | `ui/` | Interface web em TypeScript, com pt-BR e en | Não acessa o disco |
 
 Só `fontes` lê arquivos de lojas. Só `acoes` altera arquivos. Só a borda fala com a interface.

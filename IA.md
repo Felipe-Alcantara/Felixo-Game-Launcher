@@ -185,3 +185,20 @@
 - **Mudança:** `docs/DESENVOLVIMENTO.md` (requisitos por sistema, comandos do dia a dia e as armadilhas medidas), ligado do README, do `CONTRIBUTING.md` e do `AGENTS.md`, que também ganharam o gate do Rust e da interface.
 - **Correção de uma afirmação minha:** o guia dizia, no começo do dia, que o acento só atrapalhava no diretório de build. A medição seguinte mostrou que o `windres` também falha quando a pasta do código tem acento, e o guia foi corrigido antes de ser commitado.
 - **Medido x suposto:** as duas falhas por acento foram observadas; a alternativa com o Build Tools da Microsoft (MSVC) é o caminho oficial do Tauri, mas não foi exercitada neste computador, que não tem o Build Tools.
+
+---
+
+## 05/11/2026 — Correção de uma afirmação sobre o executável de teste do Tauri
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Correção:** a entrada "Aplicativo Tauri e contrato com a interface" diz que o executável de teste de um crate Tauri não abre no Windows "também com o toolchain MSVC". Isso **não foi medido**: o erro `0xC0000139` foi observado só com o toolchain GNU. Com o MSVC é um problema conhecido do Tauri, mas não foi reproduzido aqui. Os documentos de desenvolvimento e de arquitetura foram ajustados; esta entrada preserva o registro anterior, como manda a regra de só acrescentar.
+- **Efeito prático:** nenhum. O shell tem `test = false`, então o CI do Windows não tenta abrir esse executável de qualquer forma.
+
+---
+
+## 05/11/2026 — CI com Rust e interface nos três sistemas
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** o CI ganha o job `interface` (tipos, testes, build e `npm audit` com Node 22) e o job `rust` em Ubuntu, Windows e macOS: `cargo fmt --check`, `clippy -D warnings` e testes em todo o workspace, com `--locked`. O Tauri embute a interface já compilada, então o job compila a interface antes do `cargo`. No Linux instala os pacotes do WebKitGTK.
+- **Motivo:** o shell Tauri só compila de verdade nos três sistemas, e a promessa do README de testar nos três precisa ser verdade para o Rust também.
+- **Limitação:** este job nunca rodou fora do computador do autor, que usou o toolchain GNU; o MSVC, o Linux e o macOS são exercitados pela primeira vez no GitHub. O resultado será registrado em entrada própria.
