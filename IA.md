@@ -145,3 +145,12 @@
 - **Mudança:** `Biblioteca::abrir_jogo` e os erros `JogoNaoEncontrado`, `JogoIndisponivel`, `FonteDesconhecida` e `Fonte`.
 - **Decisão:** a regra "jogo indisponível não abre" mora na biblioteca, não no shell do Tauri. A arquitetura diz que a borda não tem regra de negócio, e assim a regra é testável com uma fonte falsa, sem abrir janela. Abrir um jogo de disco ausente faria o launcher original tentar reinstalá-lo ou falhar de forma confusa.
 - **Medido:** 19 testes na biblioteca (5 novos, incluindo o que garante que a fonte não é chamada quando o jogo está indisponível) e `clippy -D warnings` limpo.
+
+---
+
+## 05/11/2026 — Ícone do aplicativo gerado por script
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `scripts/icones/gerar_icone.py` (só biblioteca padrão), o ícone-fonte em `assets/` e os formatos gerados pelo Tauri CLI em `src-tauri/icons/` (o Tauri exige o `.ico` para compilar no Windows).
+- **Motivo:** um ícone próprio e reproduzível, sem baixar arte de terceiros nem depender de licença alheia. Os formatos de Android, iOS e da Microsoft Store foram descartados: o aplicativo é só para desktop.
+- **Medido:** 3 testes (PNG válido com CRC correto, cantos transparentes, play branco sobre fundo em degradê); o ícone de 1024 pixels sai em cerca de 4 s.
