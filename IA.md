@@ -81,3 +81,13 @@
 - **Motivo:** o padrão exige multiplataforma, e há histórico de testes que só passavam no Windows (decisão 14). É gratuito em repositório público.
 - **O que roda:** `ruff`, `pytest` e a verificação de links, em Ubuntu, Windows e macOS, com Python 3.11 e 3.13. Ações fixadas por versão principal, `persist-credentials: false` e permissão mínima (`contents: read`).
 - **Limitação:** o CI ainda não gera binários nem Release; isso entra com o aplicativo (Fases 1 e 2). O resultado da primeira execução será registrado em entrada própria, depois do push.
+
+---
+
+## 05/11/2026 — Primeira execução do CI
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Contexto:** primeiro envio da `main` (10 commits). O GitHub recusou a primeira tentativa porque o token do `gh` não tinha o escopo `workflow`, exigido para enviar arquivos de `.github/workflows/`. O mantenedor concedeu o escopo e o envio foi refeito.
+- **Resultado medido:** execução [42055149702](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/actions/runs/42055149702) no commit `c5415f4`, com 6 de 6 jobs verdes (Ubuntu, Windows e macOS, com Python 3.11 e 3.13), em cerca de 10 minutos.
+- **O que isso prova:** `ruff`, os 28 testes e a verificação de links passam nos três sistemas. Os testes de caminho de configuração, que simulam cada sistema, passaram também em cada sistema real.
+- **Limitação:** o CI valida o menu e a documentação; o aplicativo (Fase 1) ainda não existe, então ainda não há o que testar além disso.
