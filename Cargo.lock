@@ -787,12 +787,11 @@ dependencies = [
 
 [[package]]
 name = "felixo-game-launcher"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "felixo-biblioteca",
  "felixo-fontes",
- "serde",
- "serde_json",
+ "felixo-ipc",
  "tauri",
  "tauri-build",
 ]

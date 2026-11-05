@@ -1,6 +1,6 @@
 [package]
 name = "felixo-game-launcher"
-version = "0.0.0"
+version = "0.1.0"
 description = "Launcher open source que reúne os jogos instalados no computador, de qualquer loja ou launcher."
 edition.workspace = true
 license.workspace = true

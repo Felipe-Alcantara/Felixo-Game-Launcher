@@ -211,3 +211,11 @@
 - **Mudança:** `.github/workflows/release.yml`: ao enviar uma tag `v*`, compila o aplicativo em Windows, Ubuntu 22.04 e macOS com `tauri-apps/tauri-action` e publica os instaladores numa Release marcada como pré-lançamento. Só o job de publicação tem permissão de escrita.
 - **Decisões:** pré-lançamento porque os binários **não têm assinatura de código**: o Windows pode mostrar o SmartScreen e o macOS pode pedir para abrir pelo menu de contexto. O macOS é o `macos-latest`, que hoje é Apple Silicon: não há build para Mac com Intel ainda.
 - **Limitação:** o workflow nunca rodou. Ele só será exercitado quando a primeira tag for enviada; o resultado entra em entrada própria.
+
+---
+
+## 05/11/2026 — Versão 0.1.0
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** a versão do aplicativo (`tauri.conf.json`, `src-tauri/Cargo.toml`, `package.json` e os lockfiles) passa de 0.0.0 para 0.1.0. Os crates internos continuam em 0.0.0, porque não são publicados.
+- **Motivo:** os instaladores da Release herdam a versão do `tauri.conf.json`; uma tag `v0.1.0` com binários chamados 0.0.0 confundiria quem baixa.
