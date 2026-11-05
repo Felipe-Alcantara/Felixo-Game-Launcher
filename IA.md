@@ -14,3 +14,13 @@
 - **Premissa a confirmar:** a resposta sobre contas e rede foi aberta ("open source, rodando local, baixado em release, busca e adiciona automaticamente em qualquer sistema"). Foi interpretada como *sem login em loja e sem rede obrigatória*; capas online e chave de API ficaram como evolução.
 - **Validação:** só documentação; os links são conferidos pelo verificador descrito na entrada "Verificação de links internos".
 - **Limitação:** o escopo da v1 é grande (todas as fontes, apagar arquivos, varredura e observador). A ordem das fases é uma proposta.
+
+---
+
+## 05/11/2026 — Levantamento das fontes de jogos e arquitetura-alvo
+
+- **Mudança:** [fontes de jogos](docs/FONTES-DE-JOGOS.md) e [arquitetura-alvo](docs/ARQUITETURA.md).
+- **Motivo:** dar à Fase 1 um contrato de fonte estável (a evolução prevista são adaptadores da comunidade) e registrar as armadilhas já medidas.
+- **O que foi medido:** em um computador com Windows, a leitura de manifestos da Steam e da Epic, as entradas de desinstalação do registro, os atalhos do Menu Iniciar e a busca por marcadores de arquivo acharam jogos instalados fora de qualquer launcher. A varredura de vários discos levou minutos; bibliotecas apontavam para unidades ausentes; havia pastas de jogo sem manifesto.
+- **O que é suposição:** os argumentos de abertura de Riot, Ubisoft, Battle.net, EA e Microsoft Store, e as fontes de Linux e macOS. Estão marcados **a verificar** na tabela.
+- **Limitação:** a arquitetura é uma proposta; as travas 3 a 5 das ações no disco ainda não foram aprovadas por quem mantém o projeto.
