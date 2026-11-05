@@ -24,3 +24,12 @@
 - **O que foi medido:** em um computador com Windows, a leitura de manifestos da Steam e da Epic, as entradas de desinstalação do registro, os atalhos do Menu Iniciar e a busca por marcadores de arquivo acharam jogos instalados fora de qualquer launcher. A varredura de vários discos levou minutos; bibliotecas apontavam para unidades ausentes; havia pastas de jogo sem manifesto.
 - **O que é suposição:** os argumentos de abertura de Riot, Ubisoft, Battle.net, EA e Microsoft Store, e as fontes de Linux e macOS. Estão marcados **a verificar** na tabela.
 - **Limitação:** a arquitetura é uma proposta; as travas 3 a 5 das ações no disco ainda não foram aprovadas por quem mantém o projeto.
+
+---
+
+## 05/11/2026 — README em português e inglês
+
+- **Mudança:** [README.md](README.md) e [README.en.md](README.en.md).
+- **Motivo:** a decisão 17 pede português e inglês; o README é a porta de entrada para quem não conhece o projeto.
+- **Cuidado:** o texto diz com todas as letras que **ainda não há aplicativo para baixar**; o que existe é a base do projeto.
+- **Limitação:** a documentação detalhada (`docs/`) está só em português; o README em inglês aponta para ela e avisa.
