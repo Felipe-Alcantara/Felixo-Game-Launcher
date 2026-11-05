@@ -91,3 +91,13 @@
 - **Resultado medido:** execução [42055149702](https://github.com/Felipe-Alcantara/Felixo-Game-Launcher/actions/runs/42055149702) no commit `c5415f4`, com 6 de 6 jobs verdes (Ubuntu, Windows e macOS, com Python 3.11 e 3.13), em cerca de 10 minutos.
 - **O que isso prova:** `ruff`, os 28 testes e a verificação de links passam nos três sistemas. Os testes de caminho de configuração, que simulam cada sistema, passaram também em cada sistema real.
 - **Limitação:** o CI valida o menu e a documentação; o aplicativo (Fase 1) ainda não existe, então ainda não há o que testar além disso.
+
+---
+
+## 05/11/2026 — Premissa e travas adotadas; início da Fase 1
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Contexto:** com o CI verde, o mantenedor respondeu "Pode ir fazendo tudo" ao resumo de pendências (Fase 1, premissa da decisão 2, travas 3 a 5 das ações no disco e registro no Notion).
+- **Decisão:** a premissa da decisão 2 e as travas 3 a 5 viram regras do projeto, e o início da Fase 1 está autorizado.
+- **Motivo:** as travas só restringem (agir dentro da pasta de instalação, bloquear em disco ausente, testar em pastas temporárias), então adotá-las é o caminho conservador.
+- **Limitação:** a aprovação veio em bloco, não item a item. Para afrouxar uma trava, o mantenedor precisa dizer isso explicitamente.

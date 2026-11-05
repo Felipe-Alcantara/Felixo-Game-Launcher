@@ -39,7 +39,7 @@ Mover e apagar são a parte de maior risco do projeto.
 1. Confirmação dupla na interface, mostrando o caminho completo e o tamanho.
 2. Lixeira por padrão. Onde ela não existe ou não comporta o tamanho, o aplicativo avisa e pede uma confirmação extra antes de apagar de forma permanente.
 
-**Propostas** (ainda não aprovadas por quem mantém o projeto):
+**Adotadas** (propostas do projeto, aprovadas em 05/11/2026; veja [DECISOES.md](DECISOES.md)):
 
 3. Só agir dentro da pasta de instalação conhecida do jogo, resolvendo links simbólicos; nunca na raiz de um disco nem em pasta do sistema.
 4. Bloquear a ação em disco ausente ou com alerta de saúde.

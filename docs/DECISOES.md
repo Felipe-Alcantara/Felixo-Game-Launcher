@@ -25,3 +25,8 @@
 | 17 | Idioma | Interface e documentação em português e inglês | Dobra a manutenção dos textos |
 | 18 | Evolução | Adaptadores da comunidade para novas lojas | Contrato de fonte estável e isolado desde a v1 |
 | 19 | Complemento | Nenhum item adicional | — |
+
+## Confirmações posteriores
+
+- **05/11/2026 — premissa da decisão 2.** A resposta original foi aberta ("open source, rodando local, baixado em release, busca e adiciona automaticamente em qualquer sistema"). A leitura "sem login em loja e sem rede obrigatória" passa a valer como decisão: o mantenedor autorizou seguir o trabalho com "Pode ir fazendo tudo", sem objetar à premissa.
+- **05/11/2026 — travas 3 a 5 das ações no disco** (veja [ARQUITETURA.md](ARQUITETURA.md)): adotadas pelo mesmo motivo. São restrições de segurança; qualquer afrouxamento futuro exige decisão explícita.
