@@ -1,0 +1,50 @@
+name: Release
+
+# Publica os instaladores quando uma tag `v*` é enviada. Os binários ainda não têm
+# assinatura de código; a Release sai marcada como pré-lançamento por isso.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publicar:
+    name: publicar (${{ matrix.os }})
+    timeout-minutes: 60
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-22.04, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Dependências do Tauri no Linux
+        if: matrix.os == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev libssl-dev \
+            libayatana-appindicator3-dev librsvg2-dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: npm ci
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: Felixo Game Launcher ${{ github.ref_name }}
+          releaseBody: >-
+            Pré-lançamento sem assinatura de código: o Windows pode mostrar o aviso do SmartScreen
+            e o macOS pode pedir para abrir pelo menu de contexto. Veja o README para os detalhes.
+          releaseDraft: false
+          prerelease: true

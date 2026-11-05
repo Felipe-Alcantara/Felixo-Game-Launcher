@@ -202,3 +202,12 @@
 - **Mudança:** o CI ganha o job `interface` (tipos, testes, build e `npm audit` com Node 22) e o job `rust` em Ubuntu, Windows e macOS: `cargo fmt --check`, `clippy -D warnings` e testes em todo o workspace, com `--locked`. O Tauri embute a interface já compilada, então o job compila a interface antes do `cargo`. No Linux instala os pacotes do WebKitGTK.
 - **Motivo:** o shell Tauri só compila de verdade nos três sistemas, e a promessa do README de testar nos três precisa ser verdade para o Rust também.
 - **Limitação:** este job nunca rodou fora do computador do autor, que usou o toolchain GNU; o MSVC, o Linux e o macOS são exercitados pela primeira vez no GitHub. O resultado será registrado em entrada própria.
+
+---
+
+## 05/11/2026 — Release por tag
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `.github/workflows/release.yml`: ao enviar uma tag `v*`, compila o aplicativo em Windows, Ubuntu 22.04 e macOS com `tauri-apps/tauri-action` e publica os instaladores numa Release marcada como pré-lançamento. Só o job de publicação tem permissão de escrita.
+- **Decisões:** pré-lançamento porque os binários **não têm assinatura de código**: o Windows pode mostrar o SmartScreen e o macOS pode pedir para abrir pelo menu de contexto. O macOS é o `macos-latest`, que hoje é Apple Silicon: não há build para Mac com Intel ainda.
+- **Limitação:** o workflow nunca rodou. Ele só será exercitado quando a primeira tag for enviada; o resultado entra em entrada própria.
