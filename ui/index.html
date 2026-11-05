@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Felixo Game Launcher</title>
+    <link rel="stylesheet" href="/src/estilo.css" />
+  </head>
+  <body>
+    <header class="topo">
+      <h1 data-i18n="titulo"></h1>
+      <div class="acoes-topo">
+        <div class="campo campo-linha">
+          <label for="idioma" data-i18n="idioma_rotulo"></label>
+          <select id="idioma">
+            <option value="pt-BR">Português</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+        <button id="atualizar" type="button" class="primario" data-i18n="atualizar"></button>
+      </div>
+    </header>
+
+    <main>
+      <form id="filtros" class="filtros" role="search">
+        <div class="campo">
+          <label for="busca" data-i18n="busca_rotulo"></label>
+          <input id="busca" type="search" autocomplete="off" />
+        </div>
+        <div class="campo">
+          <label for="ordem" data-i18n="ordenar_rotulo"></label>
+          <select id="ordem">
+            <option value="nome" data-i18n="ordem_nome"></option>
+            <option value="tamanho_decrescente" data-i18n="ordem_tamanho"></option>
+          </select>
+        </div>
+      </form>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <p id="contagem" class="contagem"></p>
+
+      <section id="avisos" class="avisos" hidden aria-labelledby="avisos-titulo">
+        <h2 id="avisos-titulo" data-i18n="avisos_titulo"></h2>
+        <ul id="avisos-lista"></ul>
+      </section>
+
+      <p id="vazio" class="vazio" hidden></p>
+
+      <table id="tabela" class="tabela" hidden>
+        <caption class="so-leitor" data-i18n="tabela_legenda"></caption>
+        <thead>
+          <tr>
+            <th scope="col" data-i18n="col_jogo"></th>
+            <th scope="col" class="col-fonte" data-i18n="col_fonte"></th>
+            <th scope="col" class="num" data-i18n="col_tamanho"></th>
+            <th scope="col"><span class="so-leitor" data-i18n="col_acao"></span></th>
+          </tr>
+        </thead>
+        <tbody id="corpo"></tbody>
+      </table>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

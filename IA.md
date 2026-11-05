@@ -124,3 +124,15 @@
 - **Regra central, testada:** jogo que some da detecção fica indisponível e guarda a última vez em que foi visto; nunca é removido. Sincronizar uma fonte não mexe nas outras.
 - **Medido:** 14 testes verdes (incluindo reabrir o arquivo, duas conexões gravando e versão futura) e `clippy -D warnings` limpo no workspace.
 - **Limitações:** o `LIKE` do SQLite ignora maiúsculas só em ASCII, então a busca sem acento fica para depois. Caminhos que não são UTF-8 são gravados com perda.
+
+---
+
+## 05/11/2026 — Interface web em TypeScript
+
+- **Agente:** Buscar por jogos (Claude) · **Repositório:** Felixo-Game-Launcher
+- **Mudança:** `ui/` (Vite e TypeScript), `package.json` com versões exatas e `package-lock.json`. A tela lista os jogos, com busca, ordenação por nome ou tamanho, botões Atualizar e Jogar, em português e inglês.
+- **Decisões:** o nome do jogo vem do disco, então entra sempre como texto e nunca como HTML. A camada `api.ts` fala com o shell Tauri e, só em desenvolvimento no navegador, com dados simulados que o build de produção descarta. A paridade dos textos entre idiomas é garantida pelo compilador (`Record<Chave, string>`) e por um teste dos `{marcadores}`.
+- **Bug achado por teste:** `ehChave("toString")` devolvia verdadeiro porque o operador `in` enxerga propriedades herdadas; corrigido com `Object.hasOwn`.
+- **Achado de acessibilidade:** a borda dos campos e botões tinha 1,4:1 a 1,6:1 de contraste, abaixo dos 3:1 exigidos para elementos de interface. Ganhou um token próprio (`--borda-controle`, acima de 4,4:1). Os textos ficaram entre 7,3:1 e 18,4:1. As razões foram calculadas, não estimadas.
+- **Medido:** checagem de tipos limpa, 18 testes, build de produção (JS de cerca de 8 kB) e `npm audit` sem vulnerabilidades. No navegador, com a simulação: busca, ordenação (tamanho desconhecido por último), troca de idioma, 0 campos sem rótulo, 0 botões sem nome acessível, foco visível e nenhum erro no console. Um nome de jogo com `<img onerror=…>` apareceu como texto e a página ficou com 0 imagens.
+- **Limitações:** os avisos da detecção chegam em português do núcleo (marcado como `shortcut` no código). A tela ainda não rodou dentro do Tauri. O leiaute estreito (celular) foi escrito em CSS mas não foi testado em tela pequena.

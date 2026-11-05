@@ -1,0 +1,27 @@
+{
+  "name": "felixo-game-launcher",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interface do Felixo Game Launcher (Tauri).",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.4",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "4.1.12"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.12.4"
+  }
+}

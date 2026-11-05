@@ -1,0 +1,255 @@
+/* Tokens. Razões calculadas (WCAG AA): texto/fundo de 7,3:1 a 18,4:1 (mínimo 4,5:1) e
+   --borda-controle acima de 4,4:1 (mínimo 3:1 para elementos de interface). */
+:root {
+  color-scheme: dark light;
+  --fundo: #14161c;
+  --superficie: #1d2029;
+  --borda: #343a4a; /* linhas decorativas da tabela */
+  --borda-controle: #7d86a0; /* campos, selects e botões */
+  --texto: #e8eaf0;
+  --texto-suave: #a9b0c2;
+  --destaque: #7c9cff;
+  --sobre-destaque: #0b1020;
+  --foco: #ffd166;
+  --alerta-fundo: #3d2e14;
+  --alerta-texto: #ffd699;
+  --raio: 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --fundo: #f6f7fb;
+    --superficie: #ffffff;
+    --borda: #c9cedb;
+    --borda-controle: #6b7285;
+    --texto: #12141a;
+    --texto-suave: #4a5163;
+    --destaque: #3150c9;
+    --sobre-destaque: #ffffff;
+    --foco: #8a5a00;
+    --alerta-fundo: #fff1d6;
+    --alerta-texto: #5c3b00;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.so-leitor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--borda);
+  background: var(--superficie);
+}
+
+.topo h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.acoes-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo-linha {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtros .campo:first-child {
+  flex: 1 1 260px;
+}
+
+label {
+  font-size: 0.875rem;
+  color: var(--texto-suave);
+}
+
+input,
+select,
+button {
+  font: inherit;
+  color: var(--texto);
+}
+
+input,
+select {
+  min-height: 40px;
+  padding: 6px 10px;
+  background: var(--superficie);
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio);
+}
+
+button {
+  min-height: 40px;
+  padding: 6px 16px;
+  background: var(--superficie);
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+button.primario {
+  background: var(--destaque);
+  border-color: var(--destaque);
+  color: var(--sobre-destaque);
+  font-weight: 600;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.status {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+}
+
+.contagem {
+  margin: 0 0 16px;
+  color: var(--texto-suave);
+  font-size: 0.875rem;
+}
+
+.avisos {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: var(--alerta-fundo);
+  color: var(--alerta-texto);
+  border-radius: var(--raio);
+}
+
+.avisos h2 {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.avisos ul {
+  margin: 0;
+  padding-left: 20px;
+  overflow-wrap: anywhere;
+}
+
+.vazio {
+  padding: 32px 0;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  overflow: hidden;
+}
+
+.tabela th,
+.tabela td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--borda);
+}
+
+.tabela th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.tabela tr:last-child td {
+  border-bottom: none;
+}
+
+.tabela .num {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.nome {
+  overflow-wrap: anywhere;
+}
+
+.selo {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  background: var(--alerta-fundo);
+  color: var(--alerta-texto);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .col-fonte {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
