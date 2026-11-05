@@ -41,7 +41,7 @@ The menu checks the tools needed to build the application (Git, Node.js and Rust
 
 ## Contributing
 
-See `CONTRIBUTING.md`. Adapters for new stores are welcome.
+See the [contributing guide](CONTRIBUTING.md). Adapters for new stores are welcome.
 
 ## License
 

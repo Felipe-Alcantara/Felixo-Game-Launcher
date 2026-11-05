@@ -41,7 +41,7 @@ O menu confere as ferramentas necessárias para construir o aplicativo (Git, Nod
 
 ## Contribuir
 
-Veja `CONTRIBUTING.md`. Adaptadores para novas lojas são bem-vindos.
+Veja o [guia de contribuição](CONTRIBUTING.md). Adaptadores para novas lojas são bem-vindos.
 
 ## Licença
 

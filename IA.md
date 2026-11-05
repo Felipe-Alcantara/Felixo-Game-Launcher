@@ -33,3 +33,11 @@
 - **Motivo:** a decisão 17 pede português e inglês; o README é a porta de entrada para quem não conhece o projeto.
 - **Cuidado:** o texto diz com todas as letras que **ainda não há aplicativo para baixar**; o que existe é a base do projeto.
 - **Limitação:** a documentação detalhada (`docs/`) está só em português; o README em inglês aponta para ela e avisa.
+
+---
+
+## 05/11/2026 — Guias para agentes e contribuição
+
+- **Mudança:** [AGENTS.md](AGENTS.md), [CLAUDE.md](CLAUDE.md) e [CONTRIBUTING.md](CONTRIBUTING.md); o README passa a ligar para o guia de contribuição.
+- **Motivo:** agentes e pessoas precisam do mesmo mapa de leitura e das mesmas regras (git, gate, segurança), sem reler o repositório inteiro. Segue o padrão Felixo.
+- **Validação:** links conferidos pelo verificador de links.
